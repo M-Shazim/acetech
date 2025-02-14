@@ -2,32 +2,77 @@
 {% block title %}Home - Acetech{% endblock %}
 
 {% block content %}
-<h2 class="text-center mb-4">Our Products</h2>
+<div class="container text-center mt-5">
+    <h2 class="mb-4">Welcome to Acetech</h2>
+    <p class="lead">Your one-stop shop for premium mobile and computer accessories.</p>
 
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    {% for product in products %}
-    <div class="col">
-        <div class="card h-100 shadow-sm">
-            <div class="text-center">
-                <img src="{{ product.image.url }}" class="card-img-top img-fluid product-img" alt="{{ product.title }}">
+    <!-- Featured Categories -->
+    <div class="d-flex flex-column align-items-center mt-4">
+        <a href="{% url 'mobile_accessories' %}" class="btn btn-primary w-50 p-3 mb-3 shadow-lg rounded-pill">
+            📱 Shop Mobile Accessories
+        </a>
+        <a href="{% url 'computer_accessories' %}" class="btn btn-primary w-50 p-3 shadow-lg rounded-pill">
+            💻 Shop Computer Accessories
+        </a>
+    </div>
+
+<!-- Promotional Banner -->
+<div class="mt-5 p-4 bg-primary text-white rounded shadow">
+    <h3>✅ 100% Genuine & Tested Accessories!</h3>
+    <p>Shop with confidence! We offer only <strong> authentic, high-quality, and thoroughly tested</strong> mobile & computer accessories.</p>
+    <a href="{% url 'mobile_accessories' %}" class="btn btn-light mt-2">Shop Now</a>
+</div>
+
+
+    <!-- Why Choose Us Section -->
+    <div class="mt-5">
+        <h3>Why Shop With Us?</h3>
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <div class="p-3 border rounded shadow-sm">
+                    <h5>🚀 Fast Delivery</h5>
+                    <p>We ensure quick and hassle-free shipping so you get your accessories in no time.</p>
+                </div>
             </div>
-            <div class="card-body text-center d-flex flex-column">
-                <h5 class="card-title">{{ product.title }}</h5>
-                <p class="card-text"><strong>PKR {{ product.price }}</strong></p>
-                <a href="https://wa.me/YOUR_WHATSAPP_NUMBER?text=I want to order: {{ product.title }}" class="btn btn-success mt-auto">Order on WhatsApp</a>
+            <div class="col-md-4">
+                <div class="p-3 border rounded shadow-sm">
+                    <h5>💎 Quality Products</h5>
+                    <p>We offer only the best products, ensuring durability and top performance.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 border rounded shadow-sm">
+                    <h5>📞 24/7 Support</h5>
+                    <p>Our dedicated customer support is always ready to assist you.</p>
+                </div>
             </div>
         </div>
     </div>
-    {% endfor %}
+
+    <!-- Customer Testimonials -->
+    <div class="mt-5">
+        <h3>What Our Customers Say</h3>
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <div class="p-3 border rounded shadow-sm">
+                    <p>"Amazing service and high-quality accessories. Highly recommended!"</p>
+                    <h6>- Sarah M.</h6>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 border rounded shadow-sm">
+                    <p>"Super fast delivery and great prices. Will shop again!"</p>
+                    <h6>- John D.</h6>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 border rounded shadow-sm">
+                    <p>"The best place to buy mobile and computer accessories. Love it!"</p>
+                    <h6>- Alex R.</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
-
-<style>
-    /* Ensures all product images are of equal height */
-    .product-img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-    }
-</style>
-
 {% endblock %}
