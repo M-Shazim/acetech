@@ -8,11 +8,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}📱 Acetech{% endblock %}</title>
 
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     {% load static %}
     <link rel="icon" type="image/x-icon" href="{% static 'essentials/logo.ico' %}">
-
+    <style>
+        /* Flexbox Sticky Footer */
+        html, body {
+            height: 100%; /* Ensure the body takes full height */
+            margin: 0; /* Remove default margin */
+            display: flex;
+            flex-direction: column;
+        }
+        .wrapper {
+            flex: 1; /* Allow content to grow and push footer down */
+            display: flex;
+            flex-direction: column;
+        }
+        .content {
+            flex: 1; /* Ensure content takes up remaining space */
+        }
+    </style>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             fetchCartData();
@@ -223,10 +241,21 @@
             background-color: #218838;
             transform: scale(1.05);
         }
+        .banner-img {
+            width: 100vw; /* Full viewport width */
+            height: 80vh; /* Full viewport height */
+            object-fit: cover; /* Ensures the image covers the entire screen */
+            display: block;
+        }
+
+        
     </style>
+
+    {% block custom_styles %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-dark shadow-sm">
+    <div class="wrapper">
+    <nav class="navbar navbar-expand-lg bg-dark shadow-sm sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold text-light" href="{% url 'home' %}">⚡ Acetech</a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -259,6 +288,9 @@
         </div>
     </nav>
 
+    {% block banner %}{% endblock %}
+    
+
     <div class="container mt-4">
         {% block content %}{% endblock %}
     </div>
@@ -277,5 +309,71 @@
         <button class="checkout-btn" onclick="orderOnWhatsApp()">Order on WhatsApp</button>
 
     </div>
+</div>
+
+
+    <footer class="bg-dark text-white py-3"> <!-- Reduced py-5 to py-3 -->
+        <div class="container">
+            <div class="row g-3"> <!-- Reduced g-4 to g-3 -->
+                <!-- Store Information -->
+                <div class="col-md-4">
+                    <div class="footer-section">
+                        <h4 class="h5 mb-2">AceTech</h4> <!-- Reduced mb-3 to mb-2 -->
+                        <p class="footer-text small"> <!-- Added small class -->
+                            Your trusted source for premium mobile accessories - cases, chargers, screen protectors, 
+                            and cables. Quality guaranteed with 1-year warranty on all products.
+                        </p>
+                    </div>
+                </div>
+    
+                <!-- Contact Information -->
+                <div class="col-md-4">
+                    <div class="footer-section">
+                        <h4 class="h5 mb-2">Contact & Support</h4> <!-- Reduced mb-3 to mb-2 -->
+                        <div class="footer-contact">
+                            <p class="footer-text small"> <!-- Added small class -->
+                                <span class="fw-semibold">Call/WhatsApp:</span><br>
+                                +92 302 5334033<br>
+                                <small>(10 AM - 8 PM PKT)</small>
+                            </p>
+                            <p class="footer-text small"> <!-- Added small class -->
+                                <span class="fw-semibold">Email:</span><br>
+                                muneebshahbaz.eng@gmail.com
+                            </p>
+                            <p class="footer-text small"> <!-- Added small class -->
+                                <span class="fw-semibold">Store Address:</span><br>
+                                Club Road, Vehari 61100<br>
+                                Punjab, Pakistan
+                            </p>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Important Links -->
+                <div class="col-md-4">
+                    <div class="footer-section">
+                        <h4 class="h5 mb-2">Quick Links</h4> <!-- Reduced mb-3 to mb-2 -->
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="/#" class="footer-link small">Track Order</a></li> <!-- Added small class -->
+                            <li><a href="/#" class="footer-link small">Warranty Info</a></li> <!-- Added small class -->
+                            <li><a href="/#" class="footer-link small">FAQs</a></li> <!-- Added small class -->
+                            <li><a href="/#" class="footer-link small">Terms of Service</a></li> <!-- Added small class -->
+                            <li><a href="#" class="footer-link small">Privacy Policy</a></li> <!-- Added small class -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Copyright Notice -->
+            <div class="footer-copyright text-center mt-3 pt-3 border-top border-secondary"> <!-- Reduced mt-5 to mt-3 and pt-4 to pt-3 -->
+                <p class="mb-0 small">
+                    © 2025 AceTech. All rights reserved.<br>
+                    Prices include GST | Free shipping on orders over ₨2000
+                </p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
+
+

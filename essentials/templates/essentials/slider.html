@@ -1,0 +1,75 @@
+{% extends 'essentials/base.html' %}
+{% block title %}Home - Acetech{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h2 class="mb-4">Our Collections</h2>
+    <div class="d-flex justify-content-center align-items-center">
+        <!-- Left Arrow Button -->
+        <button class="btn btn-outline-primary me-2" onclick="slideLeft()">
+            &larr;
+        </button>
+        
+        <!-- Slider Container -->
+        <div class="slider-container" style="width: 900px; overflow: hidden;">
+            <!-- Slider Track: Contains exactly 3 items -->
+            <div id="sliderTrack" class="d-flex">
+                <!-- Item 1: Mobile Covers -->
+                <div class="slider-item text-center" style="width: 300px;">
+                    <img src="{% static 'images/covers.png' %}" alt="Mobile Covers" style="height:80px;">
+                    <p class="mt-2">Mobile Covers</p>
+                </div>
+                <!-- Item 2: Handsfree (using provided image) -->
+                <div class="slider-item text-center" style="width: 300px;">
+                    <img src="https://mirzamobile.online/cdn/shop/files/handfree.png?v=1729868214" alt="Handsfree" style="height:80px;">
+                    <p class="mt-2">Handsfree</p>
+                </div>
+                <!-- Item 3: Mobile Chargers -->
+                <div class="slider-item text-center" style="width: 300px;">
+                    <img src="{% static 'images/chargers.png' %}" alt="Mobile Chargers" style="height:80px;">
+                    <p class="mt-2">Mobile Chargers</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Arrow Button -->
+        <button class="btn btn-outline-primary ms-2" onclick="slideRight()">
+            &rarr;
+        </button>
+    </div>
+</div>
+
+<!-- Slider JavaScript -->
+<script>
+  // Function to slide items to the right (rotate leftwards)
+  function slideRight() {
+    const track = document.getElementById('sliderTrack');
+    // Animate sliding to the left by 300px (one item width)
+    track.style.transition = 'transform 0.5s ease';
+    track.style.transform = 'translateX(-300px)';
+    
+    // After the transition, move the first item to the end and reset the transform
+    track.addEventListener('transitionend', function handler() {
+      track.appendChild(track.firstElementChild);
+      track.style.transition = 'none';
+      track.style.transform = 'translateX(0)';
+      track.removeEventListener('transitionend', handler);
+    });
+  }
+
+  // Function to slide items to the left (rotate rightwards)
+  function slideLeft() {
+    const track = document.getElementById('sliderTrack');
+    // Immediately move the last item to the beginning without animation
+    track.style.transition = 'none';
+    track.insertBefore(track.lastElementChild, track.firstElementChild);
+    track.style.transform = 'translateX(-300px)';
+    
+    // Then animate back to the starting position
+    setTimeout(() => {
+      track.style.transition = 'transform 0.5s ease';
+      track.style.transform = 'translateX(0)';
+    }, 30);
+  }
+</script>
+{% endblock %}

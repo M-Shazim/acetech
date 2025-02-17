@@ -1,8 +1,12 @@
 from django.shortcuts import render
 from .models import Product
+import random
 
 def home(request):
-    return render(request, 'essentials/home.html')
+    all_products = list(Product.objects.all())
+    random.shuffle(all_products)  # Shuffle the products randomly
+    latest_products = all_products[:4]
+    return render(request, 'essentials/home.html' , {'latest_products': latest_products})
 
 def about(request):
     return render(request, 'essentials/about.html')
@@ -23,6 +27,10 @@ def cart(request):
 
 def checkout(request):
     return render(request, 'essentials/checkout.html')
+
+def product_detail(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    return render(request, 'essentials/product_detail.html', {'product': product})
 
 import uuid
 from django.http import JsonResponse

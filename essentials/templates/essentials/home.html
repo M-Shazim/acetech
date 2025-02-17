@@ -1,23 +1,243 @@
 {% extends 'essentials/base.html' %}
 {% block title %}Home - Acetech{% endblock %}
 
+{% block custom_styles %}
+<style>
+    .latest-products {
+        padding: 2rem 0;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .section-title {
+        text-align: center;
+        color: var(--deep-teal);
+        font-size: 1.8rem;
+        margin-bottom: 2.5rem;
+        font-weight: 600;
+    }
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+        padding: 0 1rem;
+    }
+
+    .product-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-image {
+        height: 200px;
+        background: var(--mist);
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .card-image img {
+        height: 100%;
+        width: auto;
+        object-fit: contain;
+        mix-blend-mode: multiply;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .product-name {
+        color: var(--slate);
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+        font-weight: 500;
+    }
+
+    .price-container {
+        margin: 1rem 0;
+    }
+
+    .current-price {
+        font-weight: 700;
+        color: var(--deep-teal);
+        font-size: 1.2rem;
+    }
+
+    .original-price {
+        color: #999;
+        text-decoration: line-through;
+        font-size: 0.9rem;
+        margin-left: 0.5rem;
+    }
+
+    .details-btn {
+        display: inline-flex;
+        /* border: 2px solid #2D3E4E; */
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.4rem 0.9rem;
+        background: var(--slate);
+        color: white;
+        background: #7ba8d2;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        font-size: 0.95rem;
+    }
+
+    .details-btn:hover {
+        background: #2D3E4E;
+        transform: translateY(-2px);
+        color: white;
+    }
+
+    .empty-message {
+        text-align: center;
+        color: #666;
+        font-size: 1rem;
+        padding: 2rem;
+        width: 100%;
+    }
+    .slider-item a{
+        text-decoration: none;
+        color: black;
+    }
+    a{
+        color: white;
+        text-decoration: none;
+
+    }
+
+    @media (max-width: 768px) {
+        .product-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .card-image {
+            height: 150px;
+        }
+    }
+</style>
+
+{% endblock %}
+
+{% load static %}
+
+<!-- Banner Image (Full-Width) -->
+{% block banner %}
+<div class="container-fluid m-0 p-0">
+    <img src="https://mirzamobile.online/cdn/shop/files/Mobile_slider-2.png?v=1730015206&amp;width=3840" 
+     alt="Acetech Banner" 
+     class="banner-img">
+
+</div>
+{% endblock %}
+
 {% block content %}
+
 <div class="container text-center mt-5">
-    <h2 class="mb-4">Welcome to Acetech</h2>
-    <p class="lead">Your one-stop shop for premium mobile and computer accessories.</p>
+
+    <h2 class="mb-4">Our Collections</h2>
+    <div class="d-flex justify-content-center align-items-center">
+        <!-- Left Arrow Button -->
+        <button class="btn btn-outline-primary me-2" onclick="slideLeft()">
+            &larr;
+        </button>
+        
+        <!-- Slider Container -->
+        <div class="slider-container" style="width: 900px; overflow: hidden;">
+            <!-- Slider Track: Contains exactly 3 items -->
+            <div id="sliderTrack" class="d-flex">
+                <!-- Item 1: Mobile Covers -->
+                <div class="slider-item text-center" style="width: 300px;">
+                    <a href="/mobile-accessories">
+                    <img src="https://mirzamobile.online/cdn/shop/files/cover.png?v=1729868201" alt="Mobile Covers" style="height:80px;">
+                    <p class="mt-2">Mobile Covers</p>
+                    </a>
+                </div>
+                <!-- Item 2: Handsfree (using provided image) -->
+                <div class="slider-item text-center" style="width: 300px;">
+                    <a href="/mobile-accessories">
+                    <img src="https://mirzamobile.online/cdn/shop/files/handfree.png?v=1729868214" alt="Handsfree" style="height:80px;">
+                    <p class="mt-2">Handsfree</p>
+                    </a>
+                </div>
+                <!-- Item 3: Mobile Chargers -->
+                <div class="slider-item text-center" style="width: 300px;">
+                    <a href="/computer-accessories">
+                    <img src="https://mirzamobile.online/cdn/shop/files/charger.png?v=1729868328" alt="Mobile Chargers" style="height:80px;">
+                    <p class="mt-2">Computer Items</p>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+        
+        <!-- Right Arrow Button -->
+        <button class="btn btn-outline-primary ms-2" onclick="slideRight()">
+            &rarr;
+        </button>
+    </div>
+
+
 
     <!-- Featured Categories -->
-    <div class="d-flex flex-column align-items-center mt-4">
+    {% comment %} <div class="d-flex flex-column align-items-center mt-4">
         <a href="{% url 'mobile_accessories' %}" class="btn btn-primary w-50 p-3 mb-3 shadow-lg rounded-pill">
             📱 Shop Mobile Accessories
         </a>
         <a href="{% url 'computer_accessories' %}" class="btn btn-primary w-50 p-3 shadow-lg rounded-pill">
             💻 Shop Computer Accessories
         </a>
+    </div> {% endcomment %}
+
+<!-- Latest Products Section -->
+<div class="latest-products mt-5">
+    <h2 class="section-title">New Arrivals</h2>
+    
+    <div class="product-grid">
+        {% for product in latest_products %}
+        <div class="product-card">
+            <div class="card-image">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            </div>
+            <div class="card-body">
+                <h3 class="product-name">{{ product.title }}</h3>
+                <div class="price-container">
+                    <span class="current-price">Rs. {{ product.price }}</span>
+                    {% if product.original_price %}
+                    <span class="original-price">Rs. {{ product.original_price }}</span>
+                    {% endif %}
+                </div>
+                <a href="{% url 'product_detail' product.id %}" class="details-btn">
+                    <i class="bi bi-arrow-right"></i> Explore
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <p class="empty-message">New products coming soon! 🚀</p>
+        {% endfor %}
     </div>
+</div>
+
+
+
+
+
 
 <!-- Promotional Banner -->
-<div class="mt-5 p-4 bg-primary text-white rounded shadow">
+<div class="mt-5 p-4 bg-dark text-white rounded shadow mb-5">
     <h3>✅ 100% Genuine & Tested Accessories!</h3>
     <p>Shop with confidence! We offer only <strong> authentic, high-quality, and thoroughly tested</strong> mobile & computer accessories.</p>
     <a href="{% url 'mobile_accessories' %}" class="btn btn-light mt-2">Shop Now</a>
@@ -25,7 +245,7 @@
 
 
     <!-- Why Choose Us Section -->
-    <div class="mt-5">
+    {% comment %} <div class="mt-5">
         <h3>Why Shop With Us?</h3>
         <div class="row mt-3">
             <div class="col-md-4">
@@ -47,10 +267,10 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> {% endcomment %}
 
     <!-- Customer Testimonials -->
-    <div class="mt-5">
+    {% comment %} <div class="mt-5">
         <h3>What Our Customers Say</h3>
         <div class="row mt-3">
             <div class="col-md-4">
@@ -72,7 +292,40 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> {% endcomment %}
 
 </div>
+
+<script>
+    // Function to slide items to the right (rotate leftwards)
+    function slideRight() {
+      const track = document.getElementById('sliderTrack');
+      // Animate sliding to the left by 300px (one item width)
+      track.style.transition = 'transform 0.5s ease';
+      track.style.transform = 'translateX(-300px)';
+      
+      // After the transition, move the first item to the end and reset the transform
+      track.addEventListener('transitionend', function handler() {
+        track.appendChild(track.firstElementChild);
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(0)';
+        track.removeEventListener('transitionend', handler);
+      });
+    }
+  
+    // Function to slide items to the left (rotate rightwards)
+    function slideLeft() {
+      const track = document.getElementById('sliderTrack');
+      // Immediately move the last item to the beginning without animation
+      track.style.transition = 'none';
+      track.insertBefore(track.lastElementChild, track.firstElementChild);
+      track.style.transform = 'translateX(-300px)';
+      
+      // Then animate back to the starting position
+      setTimeout(() => {
+        track.style.transition = 'transform 0.5s ease';
+        track.style.transform = 'translateX(0)';
+      }, 30);
+    }
+  </script>
 {% endblock %}

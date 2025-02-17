@@ -1,74 +1,241 @@
+{% extends 'essentials/base.html' %}
+
+{% block custom_styles %}
 <style>
-    /* Page Heading Styling */
-    h2 {
-        font-weight: bold;
-        color: #333;
-        text-transform: uppercase;
+    :root {
+        --clay: #E8DED1;
+        --deep-teal: #2B5858;
+        --warm-coral: #FF6B6B;
+        --soft-ink: #3D3D3D;
+        --mist: #F8F9FA;
     }
 
-    /* Card Styling */
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: var(--mist);
+    }
+
+    h2 {
+        font-weight: 600;
+        color: var(--deep-teal);
+        letter-spacing: -0.5px;
+        margin: 3rem 0 2rem;
+        font-size: 2rem;
+        text-align: center;
+        position: relative;
+    }
+
+    h2:after {
+        content: '';
+        display: block;
+        width: 50px;
+        height: 3px;
+        background: var(--warm-coral);
+        margin: 1rem auto 0;
+    }
+
     .card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
         border: none;
-        border-radius: 12px;
+        border-radius: 14px;
         overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        background: white;
+        position: relative;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     }
 
     .card:hover {
         transform: translateY(-5px);
-        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     }
 
-    /* Product Image: Fixed Aspect Ratio */
     .product-img {
-        height: 250px; /* Fixed height for uniformity */
-        width: 100%; /* Ensures full width */
-        object-fit: contain; /* Keeps entire image visible */
-        background-color: #f8f9fa; /* Light gray background */
-        padding: 10px; /* Prevents cropped edges */
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
+        height: 220px;
+        object-fit: contain;
+        padding: 2rem;
+        background: var(--mist);
+        transition: transform 0.4s ease-out;
     }
 
-    /* Button Styling */
-    .btn-success {
-        transition: all 0.3s ease-in-out;
+    .card:hover .product-img {
+        transform: scale(1.05) rotate(1deg);
+    }
+
+    .card-body {
+        padding: 1.5rem;
+        text-align: left;
+    }
+
+    .card-title {
+        font-weight: 500;
+        color: var(--soft-ink);
+        margin-bottom: 0.5rem;
+        font-size: 1.05rem;
+        line-height: 1.4;
+    }
+
+    .price-container {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+        margin: 1rem 0;
+    }
+
+    .price {
+        font-weight: 700;
+        font-size: 1.4rem;
+        background: linear-gradient(135deg, var(--deep-teal), #3A7B7B);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .price-unit {
+        color: #888;
+        font-size: 0.9rem;
+    }
+
+    .btn-group {
+        display: grid;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+    .btn-details {
+        background: var(--deep-teal);
+        color: white;
         border-radius: 8px;
+        padding: 0.8rem 1.5rem;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        transition: all 0.2s ease;
     }
 
-    .btn-success:hover {
-        background-color: #28a745;
-        transform: scale(1.05);
+    .btn-details:hover {
+        background: #1E4545;
+        transform: translateY(-1px);
     }
 
-    /* Responsive Grid */
+    .btn-cart {
+        background: var(--warm-coral);
+        color: white;
+        border-radius: 8px;
+        padding: 0.8rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        transition: all 0.2s ease;
+    }
+
+    .btn-cart:hover {
+        background: #FF5757;
+        transform: translateY(-1px);
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        background: #7FCD71;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+    }
+
+    .stock-status {
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+        color: #666;
+        margin-top: 0.5rem;
+    }
+
+    .human-note {
+        text-align: center;
+        margin: 3rem auto;
+        padding: 1.5rem;
+        background: rgba(255,255,255,0.95);
+        border-radius: 14px;
+        max-width: 800px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .handwritten {
+        font-family: 'Caveat', cursive;
+        color: var(--deep-teal);
+        font-size: 1.4rem;
+        margin: 0 0 1rem;
+    }
+
     @media (max-width: 768px) {
-        .row-cols-md-3 {
-            row-gap: 20px;
+        .product-img {
+            height: 180px;
+            padding: 1.5rem;
+        }
+        
+        .btn-group {
+            grid-template-columns: 1fr;
         }
     }
 </style>
-
-{% extends 'essentials/base.html' %}
-{% block title %}Computer Accessories - Acetech{% endblock %}
+{% endblock %}
+{% block title %}Tech Essentials - Acetech{% endblock %}
 {% block content %}
 <div class="container">
-    <h2 class="text-center my-4">💻 Computer Accessories</h2>
+    <h2>Tools for Your Digital Journey</h2>
+
+    <div class="human-note">
+        <p class="handwritten">"Picked with care by our tech team"</p>
+        <div class="d-flex justify-content-center gap-3 small">
+            <span>🔒 2-year warranty</span>
+            <span>📦 Free shipping over ₨5k</span>
+            <span>💬 Live chat support</span>
+        </div>
+    </div>
+
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for product in computer_products %}
         <div class="col">
-            <div class="card h-100 shadow-sm">
+            <div class="card h-100">
                 <img src="{{ product.image.url }}" class="card-img-top product-img" alt="{{ product.title }}">
-                <div class="card-body text-center">
+                
+                <div class="card-body">
                     <h5 class="card-title">{{ product.title }}</h5>
-                    <p class="card-text text-muted">PKR {{ product.price }}</p>
-                    <button class="btn btn-success w-100" onclick="addToCart('{{ product.title }}', {{ product.price }})">
-                        🛒 Add to Cart
-                    </button>
+                    
+                    <div class="price-container">
+                        <span class="price">₨ {{ product.price }}</span>
+                        <span class="price-unit">per unit</span>
+                    </div>
+
+                    <div class="stock-status">
+                        <span class="status-dot"></span>
+                        In stock • Ready to ship
+                    </div>
+
+                    <div class="btn-group">
+                        <a href="{% url 'product_detail' product.id %}" class="btn btn-details">
+                            <i class="bi bi-info-circle"></i> Product Details
+                        </a>
+                        <button class="btn btn-cart" onclick="addToCart('{{ product.title }}', {{ product.price }})">
+                            <i class="bi bi-bag"></i> Add to Cart
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
         {% endfor %}
+    </div>
+
+    <div class="human-note mt-5 text-center">
+        <p class="mb-2">Need help choosing? We're here for you!</p>
+        <button class="btn btn-cart" style="background: var(--deep-teal); color:white;" onclick="orderOnWhatsApp()"><i class="bi bi-chat-dots">
+
+        </i> Chat with Our Experts
+        </button>
+
+
     </div>
 </div>
 {% endblock %}
