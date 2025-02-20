@@ -1,0 +1,126 @@
+{% extends 'essentials/base.html' %}
+
+{% block title %}🛒 Your Cart - Acetech{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Your Cart</h2>
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary mb-3">Continue Shopping</a>
+
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>PRODUCT</th>
+                    <th>QUANTITY</th>
+                    <th>TOTAL</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody id="cart-items">
+                <!-- Cart items will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-end">
+        <p class="h5">Estimated Total: <span id="total-amount">PKR 0</span></p>
+        <small class="text-muted">Taxes, discounts, and shipping calculated at checkout.</small>
+    </div>
+
+    <div class="text-end mt-3">
+        <button class="btn btn-success" onclick="window.location.href='{% url 'checkout' %}'">Proceed to Checkout</button>
+        <button class="btn btn-primary" onclick="orderOnWhatsApp()">Order on WhatsApp</button>
+    </div>
+</div>
+
+<script>
+    // Cart-specific JavaScript
+    document.addEventListener("DOMContentLoaded", () => {
+        fetchCartData();
+    });
+
+    function fetchCartData() {
+        fetch("{% url 'get_cart' %}")
+        .then(response => response.json())
+        .then(data => {
+            console.log("Cart Data:", data);
+            cart = data.cart;
+            updateCart();
+        })
+        .catch(error => console.error("Error fetching cart:", error));
+    }
+
+    function updateCart() {
+        let cartItems = document.getElementById("cart-items");
+        let totalAmount = 0;
+        cartItems.innerHTML = "";
+    
+        if (!cart || cart.length === 0) {
+            cartItems.innerHTML = `<tr><td colspan="4" class="text-center">Your cart is empty.</td></tr>`;
+            document.getElementById("total-amount").innerText = "PKR 0";
+            return;
+        }
+    
+        cart.forEach((item, index) => {
+            totalAmount += item.product_price * item.quantity;
+            cartItems.innerHTML += `
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <h6 class="mb-1">${item.product_title}</h6>
+                                <small class="text-muted">Price: PKR ${item.product_price}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        ${item.quantity}
+                    </td>
+                    <td>PKR ${item.product_price * item.quantity}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="removeFromCart('${item.product_title}')">Remove</button>
+                    </td>
+                </tr>`;
+        });
+    
+        document.getElementById("total-amount").innerText = "PKR " + totalAmount;
+    }
+    function removeFromCart(productTitle) {
+        fetch("{% url 'remove_from_cart' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken  // Include the CSRF token
+            },
+            body: JSON.stringify({ title: productTitle })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Updated Cart:", data.cart);
+            cart = data.cart;
+            updateCart();
+        })
+        .catch(error => console.error("Error removing item:", error));
+    }
+
+    function orderOnWhatsApp() {
+        let phoneNumber = "923025334033";
+        let message = "Hello, I would like to place an order. Here are my cart items:\n\n";
+
+        if (cart && Object.keys(cart).length > 0) {
+            for (const [title, item] of Object.entries(cart)) {
+                message += `${title} - PKR ${item.product_price} (x${item.quantity})\n`;
+            }
+
+            let totalAmount = Object.values(cart).reduce((sum, item) => sum + (item.product_price * item.quantity), 0);
+            message += `\nTotal Amount: PKR ${totalAmount}`;
+        } else {
+            message += "My cart is empty.";
+        }
+
+        let encodedMessage = encodeURIComponent(message);
+        window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
+    }
+</script>
+{% endblock %}

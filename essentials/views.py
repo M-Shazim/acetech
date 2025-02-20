@@ -1,6 +1,9 @@
-from django.shortcuts import render
-from .models import Product
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import *
 import random
+from .forms import CheckoutForm
+
 
 def home(request):
     all_products = list(Product.objects.all())
@@ -32,6 +35,24 @@ def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     return render(request, 'essentials/product_detail.html', {'product': product})
 
+def cart(request):
+    return render(request, 'essentials/cart.html')
+
+def update_cart_quantity(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        title = data.get('title')
+        quantity = int(data.get('quantity'))  # Ensure quantity is an integer
+        
+        # Example logic to update the cart
+        cart = request.session.get('cart', {})
+        if title in cart:
+            cart[title]['quantity'] = quantity
+            request.session['cart'] = cart  # Save the updated cart back to the session
+            request.session.modified = True  # Ensure the session is saved
+        
+        return JsonResponse({'cart': cart})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 import uuid
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -107,3 +128,38 @@ def remove_from_cart(request):
         return JsonResponse({"message": "Item removed", "cart": list(cart_items)})
 
 
+
+
+def checkout(request):
+    if request.method == 'POST':
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            # Save the order
+            order = form.save(commit=False)
+            order.save()
+
+            # Clear the cart after checkout
+            session_id = request.session.session_key
+            Cart.objects.filter(session_id=session_id).delete()
+
+            messages.success(request, f"Order {order.order_number} has been placed successfully!")
+            return redirect('order_confirmation', order_number=order.order_number)
+    else:
+        form = CheckoutForm()
+
+    # Calculate the total price for each item in the cart
+    cart = Cart.objects.filter(session_id=request.session.session_key)
+    for item in cart:
+        item.total_price = item.product_price * item.quantity
+
+    total_amount = sum(item.total_price for item in cart)
+
+    return render(request, 'essentials/checkout.html', {
+        'form': form,
+        'cart': cart,
+        'total_amount': total_amount
+    })
+
+def order_confirmation(request, order_number):
+    order = Order.objects.get(order_number=order_number)
+    return render(request, 'essentials/order_confirmation.html', {'order': order})

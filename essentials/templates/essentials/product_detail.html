@@ -230,7 +230,7 @@
                 <button class="btn btn-cart" onclick="addToCart('{{ product.title }}', {{ product.price }})">
                     <i class="bi bi-cart3"></i> Add to Cart
                 </button>
-                <button class="btn btn-buy">
+                <button class="btn btn-buy" onclick="addToCart_buynow('{{ product.title }}', {{ product.price }})">
                     <i class="bi bi-bag-check"></i>
                     Buy Now
                 </button>

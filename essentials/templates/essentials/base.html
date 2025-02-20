@@ -31,23 +31,29 @@
             flex: 1; /* Ensure content takes up remaining space */
         }
     </style>
+    {% block custom_script%}
+    {%endblock%}
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            fetchCartData();
-        });
-    
-        function fetchCartData() {
-            fetch("{% url 'get_cart' %}")
+        // Shared JavaScript functions
+
+        function addToCart_buynow(title, price) {
+            fetch("{% url 'add_to_cart' %}", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, price })
+            })
             .then(response => response.json())
             .then(data => {
-                console.log("Cart Data:", data); // Check the response
+                console.log("Updated Cart:", data.cart);
                 cart = data.cart;
-                updateCart();
+                showPopup(title); // Show success message
+        
+                // Redirect to the checkout page
+                window.location.href = "{% url 'checkout' %}";
             })
-            .catch(error => console.error("Error fetching cart:", error));
-
+            .catch(error => console.error("Error adding item:", error));
         }
-    
+
         function addToCart(title, price) {
             fetch("{% url 'add_to_cart' %}", {
                 method: "POST",
@@ -56,54 +62,30 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log("Updated Cart:", data.cart); // Debugging log
-                cart = data.cart;  // Assign the updated cart
-                updateCart();  // Update UI immediately
-                showPopup(title);  // Show success message
+                console.log("Updated Cart:", data.cart);
+                cart = data.cart;
+                showPopup(title); // Show success message
             })
             .catch(error => console.error("Error adding item:", error));
         }
-        
     
         function removeFromCart(productTitle) {
             fetch("{% url 'remove_from_cart' %}", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ title: productTitle })  // Ensure key matches backend
+                body: JSON.stringify({ title: productTitle })
             })
             .then(response => response.json())
             .then(data => {
-                console.log("Updated Cart:", data.cart);  // Debugging log
-                cart = data.cart;  // Assign updated cart
-                updateCart();
+                console.log("Updated Cart:", data.cart);
+                cart = data.cart;
+                // If on the cart page, update the cart UI
+                if (window.location.pathname === "{% url 'cart' %}") {
+                    updateCart();
+                }
             })
             .catch(error => console.error("Error removing item:", error));
         }
-        
-    
-        function updateCart() {
-            let cartItems = document.getElementById("cart-items");
-            let totalAmount = 0;
-            cartItems.innerHTML = ""; // Clear previous items
-        
-            if (!cart || cart.length === 0) {
-                cartItems.innerHTML = "<li class='list-group-item'>Cart is empty</li>";
-                document.getElementById("total-amount").innerText = "PKR 0";
-                return;
-            }
-        
-            cart.forEach((item, index) => {
-                totalAmount += item.product_price;
-                cartItems.innerHTML += `<li class='list-group-item d-flex justify-content-between'>
-                    ${item.product_title} - PKR ${item.product_price} (x${item.quantity})
-                    <button class='btn btn-danger btn-sm' onclick='removeFromCart("${item.product_title}")'>Remove</button>
-                </li>`;
-            });
-        
-            document.getElementById("total-amount").innerText = "PKR " + totalAmount;
-        }
-        
-        
     
         function showPopup(productName) {
             let popup = document.createElement('div');
@@ -118,29 +100,6 @@
             popup.style.zIndex = '1000';
             document.body.appendChild(popup);
             setTimeout(() => popup.remove(), 3000);
-        }
-
-        function toggleCart() {
-            const cartSidebar = document.getElementById("cartSidebar");
-            cartSidebar.classList.toggle("active");
-        }
-        function orderOnWhatsApp() {
-            let phoneNumber = "923025334033"; // Replace with your WhatsApp number
-            let message = "Hello, I would like to place an order. Here are my cart items:\n\n";
-    
-            if (cart && cart.length > 0) {
-                cart.forEach((item, index) => {
-                    message += `${index + 1}. ${item.product_title} - PKR ${item.product_price} (x${item.quantity})\n`;
-                });
-    
-                let totalAmount = cart.reduce((sum, item) => sum + (item.product_price * item.quantity), 0);
-                message += `\nTotal Amount: PKR ${totalAmount}`;
-            } else {
-                message += "My cart is empty.";
-            }
-    
-            let encodedMessage = encodeURIComponent(message);
-            window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
         }
     </script>
 
@@ -279,10 +238,15 @@
                         <a class="nav-link text-light px-3" href="{% url 'contact' %}">📩 Contact</a>
                     </li>
                     <li class="nav-item">
+                        <a class="btn btn-outline-light rounded-pill px-4 ms-3" href="{% url 'cart' %}">
+                            🛒 Cart
+                        </a>
+                    </li>
+                    {% comment %} <li class="nav-item">
                         <button class="btn btn-outline-light rounded-pill px-4 ms-3" onclick="toggleCart()">
                             🛒 Cart
                         </button>
-                    </li>
+                    </li> {% endcomment %}
                 </ul>
             </div>
         </div>
@@ -296,7 +260,7 @@
     </div>
 
     <!-- 🔹 Sidebar Cart -->
-    <div class="cart-sidebar" id="cartSidebar">
+    {% comment %} <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
             <span>🛒 Your Cart</span>
             <button class="cart-close-btn" onclick="toggleCart()">✖</button>
@@ -308,7 +272,7 @@
         <button class="checkout-btn">Proceed to Checkout</button>
         <button class="checkout-btn" onclick="orderOnWhatsApp()">Order on WhatsApp</button>
 
-    </div>
+    </div> {% endcomment %}
 </div>
 
 
@@ -350,7 +314,7 @@
                 </div>
     
                 <!-- Important Links -->
-                <div class="col-md-4">
+                {% comment %} <div class="col-md-4">
                     <div class="footer-section">
                         <h4 class="h5 mb-2">Quick Links</h4> <!-- Reduced mb-3 to mb-2 -->
                         <ul class="list-unstyled footer-links">
@@ -361,7 +325,7 @@
                             <li><a href="#" class="footer-link small">Privacy Policy</a></li> <!-- Added small class -->
                         </ul>
                     </div>
-                </div>
+                </div> {% endcomment %}
             </div>
     
             <!-- Copyright Notice -->
@@ -373,6 +337,8 @@
             </div>
         </div>
     </footer>
+
+    
 </body>
 </html>
 

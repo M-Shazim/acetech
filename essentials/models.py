@@ -1,6 +1,8 @@
 from django.db import models
 
 from django.db import models
+from django.utils import timezone
+import uuid
 
 class Product(models.Model):
     CATEGORY_CHOICES = [
@@ -36,3 +38,26 @@ class Cart(models.Model):
     product_price = models.FloatField()
     quantity = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
+
+class Order(models.Model):
+    order_number = models.CharField(max_length=50, unique=True, editable=False)
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    address = models.CharField(max_length=255)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    zip_code = models.CharField(max_length=10)
+    country = models.CharField(max_length=100)
+    phone = models.CharField(max_length=15)
+    delivery_option = models.CharField(max_length=50)
+    payment_method = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.order_number:
+            # Generate a unique order number using UUID
+            self.order_number = str(uuid.uuid4())[:8].upper()  # Shorten UUID to 8 characters
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Order {self.order_number} by {self.name}"

@@ -13,4 +13,7 @@ urlpatterns = [
 
     path('checkout/', checkout, name='checkout'),
     path('product/<int:product_id>/', product_detail, name='product_detail'),
+    path('cart/', cart, name='cart'),
+    path('update-cart-quantity/', update_cart_quantity, name='update_cart_quantity'),
+    path('order-confirmation/<str:order_number>/', order_confirmation, name='order_confirmation'),
 ]
