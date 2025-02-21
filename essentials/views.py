@@ -80,7 +80,7 @@ def add_to_cart(request):
 
         if not created:
             cart_item.quantity += 1
-            cart_item.product_price = cart_item.quantity * product_price  # Update price based on quantity
+            # cart_item.product_price = cart_item.quantity * product_price  # Update price based on quantity
             cart_item.save()
 
         # Fetch updated cart
@@ -117,7 +117,7 @@ def remove_from_cart(request):
 
         if cart_item.quantity > 1:
             cart_item.quantity -= 1
-            cart_item.product_price = cart_item.quantity * unit_price  # Update price based on new quantity
+            # cart_item.product_price = cart_item.quantity * unit_price  # Update price based on new quantity
             cart_item.save()
         else:
             cart_item.delete()

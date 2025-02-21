@@ -14,7 +14,9 @@
                     <th>PRODUCT</th>
                     <th>QUANTITY</th>
                     <th>TOTAL</th>
-                    <th>ACTION</th>
+                    <th>Decrease Quantity</th>
+                    <th>Increase Quantity</th>
+
                 </tr>
             </thead>
             <tbody id="cart-items">
@@ -35,7 +37,6 @@
 </div>
 
 <script>
-    // Cart-specific JavaScript
     document.addEventListener("DOMContentLoaded", () => {
         fetchCartData();
     });
@@ -79,27 +80,55 @@
                     </td>
                     <td>PKR ${item.product_price * item.quantity}</td>
                     <td>
-                        <button class="btn btn-danger btn-sm" onclick="removeFromCart('${item.product_title}')">Remove</button>
+                        <button class="btn btn-danger" onclick="removeFromCart('${item.product_title}')">
+                            <i class="bi bi-bag"></i> Remove -
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-success" onclick="addToCart('${ item.product_title }', '${ item.product_price }')">
+                            <i class="bi bi-bag"></i> Add +
+                        </button>
                     </td>
                 </tr>`;
         });
     
         document.getElementById("total-amount").innerText = "PKR " + totalAmount;
     }
+
+    function addToCart(title, price) {
+        console.log(title)
+
+        console.log(price)
+        fetch("{% url 'add_to_cart' %}", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title, price })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Updated Cart:", data.cart);
+            cart = data.cart;
+            showPopup(title); // Show success message
+            if (window.location.pathname === "{% url 'cart' %}") {
+                updateCart();
+            }
+        })
+        .catch(error => console.error("Error adding item:", error));
+    } 
     function removeFromCart(productTitle) {
         fetch("{% url 'remove_from_cart' %}", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": csrftoken  // Include the CSRF token
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ title: productTitle })
         })
         .then(response => response.json())
         .then(data => {
             console.log("Updated Cart:", data.cart);
             cart = data.cart;
-            updateCart();
+            // If on the cart page, update the cart UI
+            if (window.location.pathname === "{% url 'cart' %}") {
+                updateCart();
+            }
         })
         .catch(error => console.error("Error removing item:", error));
     }
@@ -110,7 +139,7 @@
 
         if (cart && Object.keys(cart).length > 0) {
             for (const [title, item] of Object.entries(cart)) {
-                message += `${title} - PKR ${item.product_price} (x${item.quantity})\n`;
+                message += `${item.product_title} - PKR ${item.product_price} (x${item.quantity})\n`;
             }
 
             let totalAmount = Object.values(cart).reduce((sum, item) => sum + (item.product_price * item.quantity), 0);

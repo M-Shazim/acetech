@@ -35,7 +35,8 @@ class Product(models.Model):
 class Cart(models.Model):
     session_id = models.CharField(max_length=255, db_index=True)  # Unique session for each visitor
     product_title = models.CharField(max_length=255)
-    product_price = models.FloatField()
+    product_price = models.DecimalField(max_digits=10, decimal_places=2)
+    # product = models.ForeignKey(Product, on_delete=models.CASCADE)  # Link to Product
     quantity = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
 
