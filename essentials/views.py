@@ -38,6 +38,15 @@ def product_detail(request, product_id):
 def cart(request):
     return render(request, 'essentials/cart.html')
 
+def warranty_info(request):
+    return render(request, 'essentials/warranty.html')
+
+def faq_page(request):
+    return render(request, 'essentials/faq.html')
+
+def terms_page(request):
+    return render(request, 'essentials/terms.html')
+
 def update_cart_quantity(request):
     if request.method == 'POST':
         data = json.loads(request.body)
