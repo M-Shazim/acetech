@@ -117,6 +117,28 @@
         text-decoration: none;
 
     }
+    .banner-text {
+    position: absolute;
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white; /* Text color */
+    font-size: 32px; /* Adjust as needed */
+    font-weight: bold;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5); /* Optional: Adds semi-transparent background */
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%; /* Adjust width as needed */
+}
+
+.banner-text p {
+    font-size: 18px;
+    font-weight: normal;
+    margin-top: 10px;
+}
+
+
 
     @media (max-width: 768px) {
         .product-grid {
@@ -136,12 +158,22 @@
 
 <!-- Banner Image (Full-Width) -->
 {% block banner %}
-<div class="container-fluid m-0 p-0">
-    <img src="https://mirzamobile.online/cdn/shop/files/Mobile_slider-2.png?v=1730015206&amp;width=3840" 
+<!-- <div class="container-fluid m-0 p-0">
+    <img src="/media/product_images/home.png" 
      alt="Acetech Banner" 
      class="banner-img">
 
+</div> -->
+<div class="container-fluid m-0 p-0 position-relative">
+    <img src="/media/product_images/home.png" 
+         alt="Acetech Banner" 
+         class="banner-img w-100">
+    <div class="banner-text">
+        Welcome to AceTech
+        <p>Your one store for all accessories</p>
+    </div>
 </div>
+
 {% endblock %}
 
 {% block content %}
