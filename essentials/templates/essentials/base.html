@@ -54,6 +54,10 @@
             .catch(error => console.error("Error adding item:", error));
         }
 
+    function orderOnWhatsApp() {
+        window.open("https://wa.me/923025334033", "_blank");
+    }
+
         function addToCart(title, price) {
             fetch("{% url 'add_to_cart' %}", {
                 method: "POST",
