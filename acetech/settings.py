@@ -81,6 +81,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'acetech.wsgi.application'
+CSRF_TRUSTED_ORIGINS = [
+    "https://acetech.click",
+    "https://www.acetech.click",
+
+    # Add any other domains you plan to use here
+]
 
 
 # Database
