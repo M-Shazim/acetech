@@ -1,10 +1,8 @@
-# Ignore SQLite database
+# Ignore database
 db.sqlite3
-
-# Ignore SQLite database backups
 *.sqlite3.bak
 
-# Ignore Python cache and compiled files
+# Ignore compiled Python files
 __pycache__/
 *.py[cod]
 
@@ -12,6 +10,13 @@ __pycache__/
 env/
 venv/
 
-# Ignore VSCode and other editor settings
+# Editor settings
 .vscode/
 .idea/
+
+# Ignore static and media runtime folders
+/media/
+/staticfiles/
+
+/*.log
+*.pid
