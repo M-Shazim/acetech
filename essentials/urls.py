@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import *
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('', home, name='home'),
@@ -17,9 +18,14 @@ urlpatterns = [
     path('update-cart-quantity/', update_cart_quantity, name='update_cart_quantity'),
     path('order-confirmation/<str:order_number>/', order_confirmation, name='order_confirmation'),
 
+    path('privacy-policy/', privacy_policy_view, name='privacy_policy'),
+    path('shipping-policy/', shipping_policy_view, name='shipping_policy'),
+
 
     path('warranty/', warranty_info, name='warranty_info'),
     path('faq/', faq_page, name='faq_page'),
     path('terms/', terms_page, name='terms_page'),
 
+
 ]
+

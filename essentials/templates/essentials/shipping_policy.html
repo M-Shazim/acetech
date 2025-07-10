@@ -1,0 +1,57 @@
+{% extends 'essentials/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4 text-center">Shipping Policy</h1>
+
+    <p class="lead">Thank you for shopping with us! We strive to deliver your orders promptly and safely. Please read our shipping policy below.</p>
+
+    <h2 class="mt-5">📦 Order Processing Time</h2>
+    <p>All orders are processed within <strong>1–3 business days</strong>. Orders placed on weekends or holidays will be processed the next business day.</p>
+
+    <h2 class="mt-5">🚚 Shipping Methods & Delivery Time</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped mt-3">
+            <thead class="table-light">
+                <tr>
+                    <th>Shipping Method</th>
+                    <th>Estimated Delivery</th>
+                    <th>Availability</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Standard Shipping</td>
+                    <td>5–7 Business Days</td>
+                    <td>All Locations</td>
+                </tr>
+                <tr>
+                    <td>Express Shipping</td>
+                    <td>2–3 Business Days</td>
+                    <td>Major Cities</td>
+                </tr>
+                <tr>
+                    <td>Overnight Shipping</td>
+                    <td>1 Business Day</td>
+                    <td>Selected Locations Only</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2 class="mt-5">💰 Shipping Costs</h2>
+    <p>Shipping costs are calculated at checkout based on your location and chosen shipping method when order is confirmed via whatsapp.</p>
+
+    <h2 class="mt-5">🔍 Track Your Order</h2>
+    <p>Once your order is shipped, you’ll receive a tracking number via email. You can track your shipment below:</p>
+    <a href="https://www.tcsexpress.com/track/" class="btn btn-outline-primary" target="_blank" rel="noopener noreferrer">
+        Track Order with TCS
+    </a>
+
+    <h2 class="mt-5">🚫 Shipping Restrictions</h2>
+    <p>We currently ship within <strong>Pakistan</strong>. Unfortunately, we do not deliver to PO Boxes or APO/FPO addresses at this time.</p>
+
+    <h2 class="mt-5">📭 Lost or Damaged Packages</h2>
+    <p>If your package is lost or arrives damaged, please contact our support team within <strong>7 days</strong> of the expected delivery date. We'll assist you in resolving the issue quickly.</p>
+</div>
+{% endblock %}
