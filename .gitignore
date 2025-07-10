@@ -1,1 +1,23 @@
+# Ignore database
 db.sqlite3
+*.sqlite3.bak
+
+# Ignore compiled Python files
+__pycache__/
+*.py[cod]
+
+# Ignore virtual environments
+env/
+venv/
+
+# Editor settings
+.vscode/
+.idea/
+
+# Ignore static and media runtime folders
+/media/
+/staticfiles/
+
+/*.log
+*.pid
+
