@@ -17,6 +17,9 @@ def about(request):
 def contact(request):
     return render(request, 'essentials/contact.html')
 
+
+
+
 def mobile_accessories(request):
     products = Product.objects.filter(category='Mobile Accessories')
     return render(request, 'essentials/mobile_accessories.html', {'mobile_products': products})
@@ -43,6 +46,12 @@ def warranty_info(request):
 
 def faq_page(request):
     return render(request, 'essentials/faq.html')
+
+def shipping_policy_view(request):
+    return render(request, 'essentials/shipping_policy.html')
+
+def privacy_policy_view(request):
+    return render(request, 'essentials/privacy_policy.html')
 
 def terms_page(request):
     return render(request, 'essentials/terms.html')
