@@ -37,6 +37,8 @@ ALLOWED_HOSTS = [
     "acetech.click",  
     "www.acetech.click", 
     "127.0.0.1",
+    "13.48.120.194",
+    "*",
 ]
 
 
